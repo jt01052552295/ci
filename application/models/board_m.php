@@ -122,4 +122,55 @@ class Board_m extends CI_Model {
 
 	}
 
+	/**
+	 * 댓글 등록
+	 * @param  array $arrays [description]
+	 * @return int         [description]
+	 */
+	function insert_comment($arrays) {
+        $insert_array = array( 
+            'board_pid' => $arrays['board_pid'],
+            'user_id' => $arrays['user_id'],
+            'user_name' => $arrays['user_id'],
+            'subject' => $arrays['subject'],
+            'contents' => $arrays['contents'],
+            'reg_date' => date('Y-m-d H:i:s')
+        );
+        
+        $this -> db -> insert(_TBL, $insert_array);
+        
+        $board_id = $this -> db -> insert_id();
+        
+        return $board_id;
+    }
+
+	/**
+	 * 댓글 리스트
+	 * @param  int $id    	[description]
+	 * @return [type]        [description]
+	 */
+	function get_comment($id) {
+        $sql = "SELECT * FROM ". _TBL . " WHERE board_pid = '". $id . "' ORDER BY board_id DESC";
+        $query = $this->db->query($sql);
+        
+        $result = $query -> result();
+        
+        return $result;
+    }
+
+    /**
+     * [writer_check description]
+     * @return [type] [description]
+     */
+    function writer_check() {
+        $board_id = $this->uri->segment(3);
+        
+        $sql = "SELECT user_id FROM "._TBL." WHERE board_id = '".$board_id."'";
+        $query = $this->db->query($sql);
+        
+        return $query->row();
+        
+    }
+
+
 }

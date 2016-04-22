@@ -71,6 +71,8 @@ class Board extends CI_Controller {
 
 	public function view(){
 		$data['views'] = $this->board_m->get_view($this->uri->segment(3));
+		$data['comment_list'] = $this->board_m->get_comment($this->uri->segment(3));
+ 
 		$this->load->view('board/view_v', $data);
 	}
 
